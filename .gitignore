@@ -1,0 +1,7 @@
+# env data
+.env
+# Python files
+*.pyc
+# file for developer Dmitry to work on local
+typical_commands.txt
+

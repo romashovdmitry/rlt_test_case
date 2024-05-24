@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+    rlt_fastapi:
+        container_name: rlt_fastapi
+        depends_on:
+          - rlt_mongo
+        env_file:
+          - .env
+        ports:
+          - "8001:8001"
+        build:
+          context: .
+          dockerfile: ./Docker/FastAPI/Dockerfile
+        restart: always
+        volumes:
+          - ./app:/app
+        networks:
+          - rlt-network
+
+    rlt_mongo:
+      container_name: rlt_mongo
+      build:
+        context: .
+        dockerfile: ./Docker/Mongo/Dockerfile
+      ports:
+        - "27017:27017"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      volumes:
+        - ./app/data/sample_collection.bson:/data/sample_collection.bson
+        # direcrory of Mongo image for autorun of any files
+        - ./Docker/Mongo/load_data.sh:/docker-entrypoint-initdb.d/load_data.sh
+      networks:
+        - rlt-network
+      # to hide a lot of logs in console
+      command: mongod --quiet --logpath /dev/null 
+
+
+networks:
+  rlt-network:

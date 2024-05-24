@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Copy Docker Compose yml file and Dockerfiles
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.MACHINE_IP_ADDRESS }}
+        username: root
+        password: ${{ secrets.PASSWORD }}
+        port: 22
+        source: "docker-compose.yml,Docker,app"
+        target: /home/rlt_bot
+
+    - name: run_app
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.MACHINE_IP_ADDRESS }}
+        username: root
+        passphrase: ${{ secrets.PASSPHRASE }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/rlt_bot/
+          docker compose up -d --build
+          docker image prune --force
+
+      

@@ -1,0 +1,13 @@
+# Defaults for FastAPI
+# https://fastapi.tiangolo.com/deployment/docker/#package-requirements
+fastapi==0.103.2
+pydantic==2.3.0
+uvicorn==0.23.2
+# for Telegram Bot
+aiogram==3.1.1
+aiohttp==3.8.6
+# for Mongo
+pymongo==4.7.2
+motor==3.4.0
+# additional packages
+python-dateutil==2.8.2
