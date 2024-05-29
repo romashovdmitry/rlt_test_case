@@ -40,6 +40,8 @@ def timedelta_diff_helper(
         if delta_date_from < date_from:
 
             return False
+    
+        return True
 
     return (date_from - date_to) < MONGO_ARGS[group_type]["timedelta"]
 
